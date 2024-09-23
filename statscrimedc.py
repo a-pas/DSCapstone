@@ -45,3 +45,18 @@ years_counts = crimedc['YEAR'].value_counts()
 print(f"The amount of crime by the year are: {years_counts}")
 
 # %%
+# Group by SHIFT and count offenses
+shift_offense_counts = crimedc.groupby(['OFFENSE','METHOD']).size().unstack(fill_value=0)
+print(shift_offense_counts)
+
+#%%
+# Group by WARD and OFFENSE to count crimes by ward and offense type
+ward_offense_counts = crimedc.groupby(['WARD', 'OFFENSE']).size().unstack(fill_value=0)
+print(ward_offense_counts)
+
+# %%
+# Group by HOUR and OFFENSE to see crimes by time of day
+hour_counts = crimedc.groupby(['YEAR'],['HOUR']).value_counts().sort_index()
+print(hour_counts)
+
+# %%
