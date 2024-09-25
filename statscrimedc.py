@@ -4,50 +4,48 @@ import pandas as pd
 
 crimedc = pd.read_csv('combined_data_split.csv')
 # %%
-
-crimedc.columns
-# %%
-## Basic View of the Data
-
-years_present = crimedc['YEAR'].unique()
-print(f"These are the years in question: {years_present}")
-
-wards_present = crimedc['WARD'].unique()
-print(f"These are the wards in question: {wards_present}")
-
-shift_types = crimedc['SHIFT'].unique()
-print(f"These are the types of shifts: {shift_types}")
-
-districts = crimedc['DISTRICT'].unique()
-print(f"These are the districts: {districts}")
-
-possible_offenses = crimedc['OFFENSE'].unique()
-print(f"These are the possible offenses: {possible_offenses}")
-
-types_of_methods = crimedc['METHOD'].unique()
-print(f"These are the possible methods: {possible_offenses}")
-
-time_span = crimedc['YEAR'].unique()
-print(f"This data spans the following years: {time_span}")
+crimedc.head()
 
 # %%
-# Frequency counts for SHIFT
-shift_counts = crimedc['SHIFT'].value_counts()
-print(f"The amount of offenses per shift are: {shift_counts}")
+print(crimedc.columns)
 
-# Frequency counts for METHOD (e.g., gun, knife, etc.)
-method_counts = crimedc['METHOD'].value_counts()
-print(f"The amount of offenses according to each method are: {method_counts}")
+print(crimedc.dtypes)
 
-# Frequency counts for different types of OFFENSE
-offense_counts = crimedc['OFFENSE'].value_counts()
-print(f"The amoount of offenses according to the type of offense is: {offense_counts}")
+#%% 
+print(crimedc.describe)
 
 #%%
-# Frequency counts for the different years of crime
-years_counts = crimedc['YEAR'].value_counts()
-print(f"The amount of crime by the year are: {years_counts}")
+print(crimedc.describe(include='object'))
 
+#%%
+
+
+# %%
+## Basic View of the amount of crime according to different columns
+
+offense_by_year = crimedc['YEAR'].value_counts(ascending=False)
+print(f"These are the offenses ranked according to year: {offense_by_year}")
+
+offense_by_ward = crimedc['WARD'].value_counts()
+print(f"These are the offenses ranked according to ward: {offense_by_ward}")
+
+offense_by_shift = crimedc['SHIFT'].value_counts()
+print(f"These are the offenses ranked according to shift: {offense_by_shift}")
+
+offense_by_district = crimedc['DISTRICT'].value_counts()
+print(f"These are the offenses ranked according to district: {offense_by_district}")
+
+offense_by_offense = crimedc['OFFENSE'].value_counts()
+print(f"These are the offenses ranked according to type of offense: {offense_by_offense}")
+
+offenses_per_hour = crimedc['HOUR'].value_counts()
+print(f"These are the offenses ranked according to hour:{offenses_per_hour}")
+
+offenses_by_method = crimedc['METHOD'].value_counts()
+print(f"These are the offenses ranked according to method: {offenses_by_method}")
+
+offenses_by_month = crimedc['MONTH'].value_counts()
+print(f"These are the offenses according to month:{offenses_by_month}")
 # %%
 # Group by offense and method
 method_offense_counts = crimedc.groupby(['OFFENSE','METHOD']).size().unstack(fill_value=0)
@@ -64,31 +62,53 @@ print (percentage_method_offense.round(1))
 #%%
 # Group by WARD and OFFENSE to count crimes by ward and offense type
 ward_offense_counts = crimedc.groupby(['WARD', 'OFFENSE']).size().unstack(fill_value=0)
-print(ward_offense_counts)
+print(f"These are the offense types by ward{ward_offense_counts}")
 
 percentage_ward_offense = ward_offense_counts.copy()
 
 for ward in ward_offense_counts.index:
-    total_count = ward_offense_counts.loc[ward].sum()  # Total count for this ward
-    if total_count > 0:  # Avoid division by zero
-        # Update only the row for the current ward with percentage values
+    total_count = ward_offense_counts.loc[ward].sum()  
+    if total_count > 0: 
         percentage_ward_offense.loc[ward] = (ward_offense_counts.loc[ward] / total_count) * 100
 
 percentage_ward_offense = percentage_ward_offense.round(2)
 
-print(percentage_ward_offense)
+print(f"These are their percentages by ward{percentage_ward_offense}")
 # %%
-# Group by HOUR and OFFENSE to see crimes by time of day
-hour_counts = crimedc.groupby(['YEAR'],['HOUR']).value_counts().sort_index()
-print(hour_counts)
+import statistics
+
+# Group by 'YEAR' and count the number of offenses in each year
+offenses_per_year_count = crimedc.groupby(['OFFENSE','YEAR']).size().unstack(fill_value=0)
+
+print(offenses_per_year_count)
+
 
 # %%
-# Total NaN values in the entire dataset
-nan_total = crimedc.isna().sum().sum()
-print(f"Total NaN values in the dataset: {nan_total}")
 
-# %%
-# Check data types of all columns
-print(crimedc.dtypes)
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+
+
+encoded_crimedc = crimedc.copy()
+
+
+categorical_columns = ['SHIFT', 'METHOD', 'OFFENSE', 'BLOCK', 'WARD', 'ANC', 'DISTRICT', 'PSA', 'VOTING_PRECINCT']
+
+
+encoder = LabelEncoder()
+
+
+for col in categorical_columns:
+    encoded_crimedc[col] = encoder.fit_transform(crimedc[col].astype(str)) 
+
+
+correlation_matrix = encoded_crimedc.corr()
+
+
+plt.figure(figsize=(12, 10))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
+plt.title('Correlation Matrix')
+plt.show()
 
 # %%
