@@ -17,9 +17,6 @@ print(crimedc.describe)
 #%%
 print(crimedc.describe(include='object'))
 
-#%%
-
-
 # %%
 ## Basic View of the amount of crime according to different columns
 
