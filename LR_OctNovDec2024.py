@@ -129,3 +129,74 @@ plt.tight_layout()
 plt.show()
 
 # %%
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+df = pd.read_csv(r'C:\Users\AP\Documents\GitHub\DSCapstone\DataCleaningandProcessing\combined_data_2024.csv')
+
+# Select necessary columns
+df = df[['YEAR', 'MONTH', 'DAY', 'HOUR', 'WARD', 'OFFENSE']]
+
+# Prepare data for crime type prediction
+X = df[['YEAR', 'MONTH', 'DAY', 'HOUR']]
+y_offense = df['OFFENSE']
+
+# Split the data
+X_train_offense, X_test_offense, y_train_offense, y_test_offense = train_test_split(X, y_offense, test_size=0.2, random_state=42)
+
+# Train the Random Forest Classifier for crime types
+crime_type_model = RandomForestClassifier()
+crime_type_model.fit(X_train_offense, y_train_offense)
+
+# Predict and evaluate model accuracy for crime types
+y_pred_offense = crime_type_model.predict(X_test_offense)
+offense_accuracy = accuracy_score(y_test_offense, y_pred_offense)
+print(f'Accuracy for Crime Type Prediction: {offense_accuracy:.2f}')
+
+# Feature importance for crime type model
+importances_offense = crime_type_model.feature_importances_
+feature_names = X.columns
+feature_importance_df_offense = pd.DataFrame({
+    'Feature': feature_names,
+    'Importance': importances_offense
+}).sort_values(by='Importance', ascending=False)
+
+# Plot feature importance for crime type
+plt.figure(figsize=(10, 5))
+sns.barplot(x='Importance', y='Feature', data=feature_importance_df_offense)
+plt.title('Feature Importance for Crime Type Prediction')
+plt.show()
+
+# Prepare data for ward prediction
+y_ward = df['WARD']
+X_train_ward, X_test_ward, y_train_ward, y_test_ward = train_test_split(X, y_ward, test_size=0.2, random_state=42)
+
+# Train the Random Forest Classifier for wards
+ward_model = RandomForestClassifier()
+ward_model.fit(X_train_ward, y_train_ward)
+
+# Predict and evaluate model accuracy for wards
+y_pred_ward = ward_model.predict(X_test_ward)
+ward_accuracy = accuracy_score(y_test_ward, y_pred_ward)
+print(f'Accuracy for Ward Prediction: {ward_accuracy:.2f}')
+
+# Feature importance for ward model
+importances_ward = ward_model.feature_importances_
+feature_importance_df_ward = pd.DataFrame({
+    'Feature': feature_names,
+    'Importance': importances_ward
+}).sort_values(by='Importance', ascending=False)
+
+# Plot feature importance for ward prediction
+plt.figure(figsize=(10, 5))
+sns.barplot(x='Importance', y='Feature', data=feature_importance_df_ward)
+plt.title('Feature Importance for Ward Prediction')
+plt.show()
+
+# %%

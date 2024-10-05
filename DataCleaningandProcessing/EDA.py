@@ -168,3 +168,46 @@ plt.grid(axis='y')
 plt.tight_layout()
 plt.show()
 #%%
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the dataset
+file_path = r'C:\Users\AP\Documents\GitHub\DSCapstone\DataCleaningandProcessing\combined_data_2024.csv'
+data = pd.read_csv(file_path)
+
+# Convert MONTH column to a categorical type for proper sorting
+data['MONTH'] = pd.Categorical(data['MONTH'], 
+                               categories=['January', 'February', 'March', 'April', 'May', 
+                                           'June', 'July', 'August', 'September', 'October', 
+                                           'November', 'December'], 
+                               ordered=True)
+
+# Group by YEAR and MONTH, counting the number of crimes
+monthly_crime_counts = data.groupby(['YEAR', 'MONTH']).size().reset_index(name='CRIME_COUNT')
+
+# Pivot the data to prepare for plotting
+pivot_table = monthly_crime_counts.pivot(index='MONTH', columns='YEAR', values='CRIME_COUNT').fillna(0)
+
+# Plotting
+plt.figure(figsize=(12, 6))
+for year in pivot_table.columns:
+    plt.plot(pivot_table.index, pivot_table[year], marker='o', label=year)
+
+plt.title('Month-to-Month Crime Trends (2008-2024)')
+plt.xlabel('Month')
+plt.ylabel('Number of Crimes')
+plt.xticks(rotation=45)
+plt.legend(title='Year')
+plt.grid()
+plt.ylim(0, 5000)  # Set the y-axis limits from 0 to 5000
+plt.tight_layout()
+plt.show()
+
+# %%
+# Group by YEAR and MONTH, counting the number of crimes
+monthly_crime_counts = data.groupby(['YEAR', 'MONTH']).size().reset_index(name='CRIME_COUNT')
+
+# Print the grouped data to check if it's being counted correctly
+print(monthly_crime_counts)
+
+# %%
