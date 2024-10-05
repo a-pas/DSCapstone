@@ -52,30 +52,28 @@ predicted_2024_data = pd.DataFrame({
     'HOUR': np.random.randint(0, 24, size=sum(predicted_crimes.values()))  # Random hours of the day
 })
 
-# Step 3: Predict crime types for 2024
+# Predict crime types for J-A 2024
 predicted_crime_types = crime_type_model.predict(predicted_2024_data[['YEAR', 'MONTH', 'DAY', 'HOUR']])
 
-# Step 4: Predict wards for 2024
+# Predict wards for J-A 2024
 predicted_wards = ward_model.predict(predicted_2024_data[['YEAR', 'MONTH', 'DAY', 'HOUR']])
 
-# Add the predictions to the DataFrame
 predicted_2024_data['PREDICTED_CRIME_TYPE'] = predicted_crime_types
 predicted_2024_data['PREDICTED_WARD'] = predicted_wards
 
-# Show the first few rows of the predictions
 print(predicted_2024_data.head())
 
-# Group by month to summarize crime types and wards
 crime_type_summary = predicted_2024_data.groupby(['MONTH', 'PREDICTED_CRIME_TYPE']).size().reset_index(name='COUNT')
 ward_summary = predicted_2024_data.groupby(['MONTH', 'PREDICTED_WARD']).size().reset_index(name='COUNT')
 
-# Display summaries
+#Summaries - crime type & ward predictions J-A 24
 print("Crime Type Summary for Jan-Apr 2024")
 print(crime_type_summary)
 print("\nWard Summary for Jan-Apr 2024")
 print(ward_summary)
 
 #%%
+# Plotting Bar Graphs with Labels 
 import matplotlib.pyplot as plt
 import seaborn as sns
 
