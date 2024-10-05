@@ -1,13 +1,12 @@
 import pandas as pd
 
 
-file_path = r'C:\Users\AP\Documents\GitHub\DSCapstone\DataCleaningandProcessing'
+file_path = r'C:\Users\AP\Documents\GitHub\DSCapstone\DataCleaningandProcessing\combined_data_2024.csv'
 data = pd.read_csv(file_path)
 
 data.head()
 data.info()
 
-data = data[data['YEAR'] != 2024]
 
 print(data['YEAR'].unique()) 
 
@@ -73,6 +72,7 @@ plt.xlabel('Year')
 plt.ylabel('Number of Crime Incidents')
 plt.xticks(crime_by_year.index, rotation=45)
 plt.grid(True)
+plt.ylim(0, max(crime_by_year) + 100)  
 plt.show()
 
 # Violent Crime vs. Non Violent Crime
@@ -127,7 +127,7 @@ plt.show()
 
 # Non-Violent crime over the years
 
-nonviolent_crimes = ['ARSON', 'BURGLARY', 'MOTOR VEHICLE THEFT', 'THEFT F/AUTO', 'THEFT/OTHER']
+nonviolent_crimes = ['ARSON', 'BURGLARY', 'MOTOR VEHICLE THEFT', 'THEFT']
 
 nonviolent_crime_data = data[data['OFFENSE'].isin(nonviolent_crimes)]
 nonviolent_crime_by_year_offense = nonviolent_crime_data.groupby(['YEAR', 'OFFENSE']).size().unstack().fillna(0)
@@ -152,7 +152,7 @@ plt.show()
 
 crime_by_ward = data.groupby('WARD').size()
 violent_crimes = ['HOMICIDE', 'SEX ABUSE', 'ASSAULT W/DANGEROUS WEAPON', 'ROBBERY']
-non_violent_crimes = ['THEFT', 'AUTO THEFT', 'BURGLARY', 'VANDALISM']
+non_violent_crimes = ['THEFT', 'AUTO THEFT', 'BURGLARY', 'VANDALISM', 'ARSON']
 data['CRIME_TYPE'] = data['OFFENSE'].apply(lambda x: 'Violent' if x in violent_crimes else 'Non-Violent')
 crime_by_ward_type = data.groupby(['WARD', 'CRIME_TYPE']).size().unstack().fillna(0)
 
@@ -167,3 +167,4 @@ plt.xticks(rotation=45)
 plt.grid(axis='y')
 plt.tight_layout()
 plt.show()
+#%%
