@@ -3,37 +3,28 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
-# Load the dataset
 df = pd.read_csv(r'C:\Users\AP\Documents\GitHub\DSCapstone\DataCleaningandProcessing\combined_data.csv')
 
-# Prepare data for predicting crime type and ward
-# Filtering the relevant columns and rows
 df = df[['YEAR', 'MONTH', 'DAY', 'HOUR', 'WARD', 'OFFENSE']]  # Use the necessary columns
 
-# Step 1: Train a model to predict crime type
-X = df[['YEAR', 'MONTH', 'DAY', 'HOUR']]  # Features
-y_offense = df['OFFENSE']  # Target for crime type
-
-# Train-test split
+X = df[['YEAR', 'MONTH', 'DAY', 'HOUR']] 
+y_offense = df['OFFENSE'] 
 X_train_offense, X_test_offense, y_train_offense, y_test_offense = train_test_split(X, y_offense, test_size=0.2, random_state=42)
 
-# Random Forest Classifier for crime type
+# Random Forest Classifier 
 crime_type_model = RandomForestClassifier()
 crime_type_model.fit(X_train_offense, y_train_offense)
 
-# Step 2: Train a model to predict the ward
-y_ward = df['WARD']  # Target for ward
+#%%
+# RCF - Ward
+y_ward = df['WARD'] 
 
-# Train-test split
 X_train_ward, X_test_ward, y_train_ward, y_test_ward = train_test_split(X, y_ward, test_size=0.2, random_state=42)
 
-# Random Forest Classifier for ward
 ward_model = RandomForestClassifier()
 ward_model.fit(X_train_ward, y_train_ward)
 
-# Now, let's generate data for the predicted crimes in 2024
-
-# Predicted number of crimes for each month in 2024
+# Generating Data Based on Previous Predictions for Count/Month
 predicted_crimes = {
     'January': 2306,
     'February': 2358,
@@ -41,7 +32,6 @@ predicted_crimes = {
     'April': 2462
 }
 
-# Create a DataFrame for predictions (January to April 2024)
 predicted_2024_data = pd.DataFrame({
     'YEAR': [2024] * sum(predicted_crimes.values()),
     'MONTH': [1] * predicted_crimes['January'] + 
