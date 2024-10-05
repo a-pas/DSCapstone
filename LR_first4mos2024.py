@@ -100,3 +100,33 @@ plt.ylabel('Number of Crimes')
 plt.legend(title='Ward', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.tight_layout()
 plt.show()
+
+#%%
+#Pie Chart - Wards
+import matplotlib.pyplot as plt
+
+months = ['January', 'February', 'March', 'April']
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 12))
+axes = axes.flatten() 
+
+for i, month in enumerate(months):
+    month_data = predicted_2024_data[predicted_2024_data['MONTH_NAME'] == month]
+    
+    ward_counts = month_data.groupby('PREDICTED_WARD')['PREDICTED_WARD'].count()
+    
+    def autopct_format(values):
+        def inner_autopct(pct):
+            total = sum(values)
+            val = int(round(pct * total / 100.0))
+            return f'{val} ({pct:.1f}%)'
+        return inner_autopct
+    
+    axes[i].pie(ward_counts, labels=ward_counts.index, autopct=autopct_format(ward_counts), startangle=90, colors=sns.color_palette('Set1'))
+    axes[i].set_title(f'Predicted Ward Distribution for Crimes in {month} 2024')
+    axes[i].axis('equal') 
+
+plt.tight_layout()
+plt.show()
+
+# %%
