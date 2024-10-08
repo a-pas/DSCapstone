@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-crimedc = pd.read_csv('combined_data_split.csv')
+crimedc = pd.read_csv('DataCleaningandProcessing/combined_data.csv')
 # %%
 crimedc.head()
 
@@ -109,3 +109,44 @@ plt.title('Correlation Matrix')
 plt.show()
 
 # %%
+#Percentage of each offense in 15 year data
+
+offense_counts = crimedc['OFFENSE'].value_counts()
+total_offenses = offense_counts.sum()
+offense_percentages = ((offense_counts/total_offenses)*100).round(1)
+
+print(f"The rate of crime according to type is {offense_percentages}")
+
+# %%
+#Percentage of each method including and excluding "other"
+
+##including
+method_counts = crimedc['METHOD'].value_counts()
+total_method = method_counts.sum()
+method_percentages = ((method_counts/total_method)*100).round(1)
+print(f"The rate of the method of crime including others is {method_percentages}")
+
+##excluding others
+crimedc_no_others_method = crimedc[crimedc['METHOD']!= 'OTHERS']
+
+method_filtered_counts = crimedc_no_others_method['METHOD'].value_counts()
+
+total_method_filtered = method_filtered_counts.sum()
+
+method_filtered_percentages = ((method_filtered_counts/total_method_filtered)*100).round(1)
+
+print(f"The rate of the method of crime excluding others is {method_filtered_percentages}")
+
+# %%
+
+#Let's see the breakdown of crime per shift
+
+shift_counts = crimedc['SHIFT'].value_counts()
+
+total_shifts = crimedc['SHIFT'].sum()
+
+shift_percentages = ((shift_counts/total_shifts)*100).round()
+
+print(f"The breakdown of crime according to which shift they occur during is {shift_percentages}")
+# %%
+
