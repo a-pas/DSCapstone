@@ -194,3 +194,99 @@ percentage_change = ((crime_2023 - crime_2008) / crime_2008) * 100
 print(f"The percentage change in crime from 2008 to 2023 is {percentage_change:.2f}%")
 
 # %%
+#Let's see how much crime has evolved since the year with the most crime (2014)
+
+crime_2014 = crimedc[crimedc['YEAR'] == 2014]['OFFENSE'].count()
+crime_2023 = crimedc[crimedc['YEAR'] == 2023]['OFFENSE'].count()
+
+percentage_change = ((crime_2023 - crime_2014) / crime_2014) * 100
+
+print(f"The percentage change in crime from 2014 to 2023 is {percentage_change:.2f}%")
+
+# %%
+#Let's see how much crime has evolved since the first pandemic year (2020)
+
+
+crime_2020 = crimedc[crimedc['YEAR'] == 2020]['OFFENSE'].count()
+crime_2023 = crimedc[crimedc['YEAR'] == 2023]['OFFENSE'].count()
+
+percentage_change = ((crime_2023 - crime_2020) / crime_2020) * 100
+
+print(f"The percentage change in crime from 2020 to 2023 is {percentage_change:.2f}%")
+# %%
+#Seeing as the summer and early fall see the most crime, let's see how much of those months make up crime overall
+summer_fall_crimes = crimedc[crimedc['MONTH'].isin([6, 7, 8, 9, 10])]
+total_crimes = len(crimedc)
+summer_fall_count = len(summer_fall_crimes)
+percentage_summer_fall = (summer_fall_count / total_crimes) * 100
+
+print(f"The percentage of crimes occurring in June to October is {percentage_summer_fall:.2f}%")
+
+
+# %%
+#Let's now be a bit more detailed and create a temporal heatmap
+
+import seaborn as sns
+
+crimedc['TIME'] = crimedc['HOUR'].astype(str) + ':' + crimedc['MINUTE'].astype(str)
+
+heatmap_data = crimedc.groupby('HOUR').size().reset_index(name='count')
+
+heatmap_data = heatmap_data.pivot_table(index='HOUR', values='count', fill_value=0)
+
+plt.figure(figsize=(10, 8))
+sns.heatmap(heatmap_data, cmap='coolwarm', annot=True, cbar=True)
+
+plt.title('Crime Distribution by Hour of the Day')
+plt.xlabel('Count of Crimes')
+plt.ylabel('Hour of the Day')
+
+plt.show()
+
+
+# %%
+#Let's visualize the crime according to the time using a histogram now
+plt.figure(figsize=(10, 6))
+plt.hist(crimedc['HOUR'], bins=24, edgecolor='black')
+
+plt.title('Crime Distribution by Hour of the Day')
+plt.xlabel('Hour of the Day')
+plt.ylabel('Number of Crimes')
+plt.xticks(range(0, 24))
+
+plt.show()
+
+# %%
+# A Quick Bar Chart of the Crimes per year
+offenses_per_year = crimedc['YEAR'].value_counts().sort_index()
+
+plt.figure(figsize=(10, 6))
+plt.bar(offenses_per_year.index, offenses_per_year.values, color='grey', edgecolor='black')
+
+plt.title('Offenses per Year')
+plt.xlabel('Year')
+plt.ylabel('Number of Offenses')
+plt.xticks(offenses_per_year.index, rotation=45) 
+
+plt.show()
+
+# %%
+#Let's now group the crime according to violent vs property and see how those rates have changed over the years of interest so far
+
+crimedc['OFFENSE'].unique()
+
+violent_crimes = ['HOMICIDE', 'SEX ABUSE', 'ASSAULT W/DANGEROUS WEAPON', 'ROBBERY']
+property_crimes = ['BURGLARY', 'THEFT', 'ARSON', 'MOTOR VEHICLE THEFT']
+
+crimedc['TYPE'] = np.where(crimedc['OFFENSE'].isin(violent_crimes), 'VIOLENT', np.where(crimedc['OFFENSE'].isin(property_crimes), 'PROPERTY', np.nan))
+
+print(crimedc['TYPE'].head())
+
+#Let's look at the proportion of crime type now
+
+type_counts = crimedc['TYPE']
+type_total = len(crimedc)
+type_percentages = ((type_counts/type_total)*100).round(1)
+
+print(f"The proportion of crime according to type is{type_percentages}")
+# %%
