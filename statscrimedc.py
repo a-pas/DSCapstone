@@ -184,3 +184,13 @@ block_total = len(crimedc)
 block_percentages = ((block_counts/block_total)*100).round(1)
 print(f"The rate of crime one each block is {block_percentages}")
 # %%
+#Let's now see how much crime has evolved from 2008 to 2023
+
+crime_2008 = crimedc[crimedc['YEAR'] == 2008]['OFFENSE'].count()
+crime_2023 = crimedc[crimedc['YEAR'] == 2023]['OFFENSE'].count()
+
+percentage_change = ((crime_2023 - crime_2008) / crime_2008) * 100
+
+print(f"The percentage change in crime from 2008 to 2023 is {percentage_change:.2f}%")
+
+# %%
