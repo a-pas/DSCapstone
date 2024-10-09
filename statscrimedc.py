@@ -143,10 +143,44 @@ print(f"The rate of the method of crime excluding others is {method_filtered_per
 
 shift_counts = crimedc['SHIFT'].value_counts()
 
-total_shifts = crimedc['SHIFT'].sum()
+total_shifts = len(crimedc)
 
-shift_percentages = ((shift_counts/total_shifts)*100).round()
+shift_percentages = ((shift_counts/total_shifts)*100).round(1)
 
 print(f"The breakdown of crime according to which shift they occur during is {shift_percentages}")
 # %%
 
+#Let's see the breakdown of crime by ward
+
+ward_counts = crimedc['WARD'].value_counts()
+total_ward = len(crimedc)
+ward_percentages = ((ward_counts/total_ward)*100).round(1)
+
+print(f"The breakdown of crime according to ward is {ward_percentages}")
+
+# %%
+#Let's see the breakdown of crime by Police District
+
+district_counts = crimedc['DISTRICT'].value_counts()
+district_total = len(crimedc)
+district_percentages = ((district_counts/district_total)*100).round(1)
+
+print(f"The rate of crime according to police districts is {district_percentages}")
+
+#%%
+
+#Let's see the breakdown of crime by Police Service Area
+psa_counts = crimedc['PSA'].value_counts()
+psa_total = len(crimedc)
+psa_percentages = ((psa_counts/psa_total)*100).round(1)
+
+print(f"The rate of crime according to police service areas is {psa_percentages}")
+
+#%%
+#Let's see the breakdown of crime according to the blocks
+
+block_counts = crimedc['BLOCK'].value_counts()
+block_total = len(crimedc)
+block_percentages = ((block_counts/block_total)*100).round(1)
+print(f"The rate of crime one each block is {block_percentages}")
+# %%
