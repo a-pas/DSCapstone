@@ -272,6 +272,7 @@ plt.show()
 
 # %%
 #Let's now group the crime according to violent vs property and see how those rates have changed over the years of interest so far
+import numpy as np
 
 crimedc['OFFENSE'].unique()
 
@@ -289,4 +290,35 @@ type_total = len(crimedc)
 type_percentages = ((type_counts/type_total)*100).round(1)
 
 print(f"The proportion of crime according to type is{type_percentages}")
+# %%
+#Let's see where homicides mainly occur
+homicides = crimedc[crimedc['OFFENSE'] == 'HOMICIDE']
+
+homicide_counts = homicides.groupby('WARD').size()
+
+homicide_counts = homicide_counts.sort_values(ascending=False)
+
+print(homicide_counts)
+# %%
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+homicides = crimedc[crimedc['OFFENSE'] == 'HOMICIDE']
+
+homicide_counts_by_year = homicides.groupby('YEAR').size()
+
+plt.figure(figsize=(10, 6))
+plt.plot(homicide_counts_by_year.index, homicide_counts_by_year.values, marker='o', linestyle='-', color='b')
+
+plt.title('Evolution of Homicides (2008 to 2023)', fontsize=14)
+plt.xlabel('Year', fontsize=12)
+plt.ylabel('Number of Homicides', fontsize=12)
+
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+
 # %%
