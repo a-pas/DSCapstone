@@ -271,26 +271,6 @@ plt.xticks(offenses_per_year.index, rotation=45)
 plt.show()
 
 # %%
-#Let's now group the crime according to violent vs property and see how those rates have changed over the years of interest so far
-import numpy as np
-
-crimedc['OFFENSE'].unique()
-
-violent_crimes = ['HOMICIDE', 'SEX ABUSE', 'ASSAULT W/DANGEROUS WEAPON', 'ROBBERY']
-property_crimes = ['BURGLARY', 'THEFT', 'ARSON', 'MOTOR VEHICLE THEFT']
-
-crimedc['TYPE'] = np.where(crimedc['OFFENSE'].isin(violent_crimes), 'VIOLENT', np.where(crimedc['OFFENSE'].isin(property_crimes), 'PROPERTY', np.nan))
-
-print(crimedc['TYPE'].head())
-
-#Let's look at the proportion of crime type now
-
-type_counts = crimedc['TYPE']
-type_total = len(crimedc)
-type_percentages = ((type_counts/type_total)*100).round(1)
-
-print(f"The proportion of crime according to type is{type_percentages}")
-# %%
 #Let's see where homicides mainly occur
 homicides = crimedc[crimedc['OFFENSE'] == 'HOMICIDE']
 
