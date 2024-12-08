@@ -1,0 +1,45 @@
+                  Feature  Importance
+8           ROLLING_STD_3          69
+6          ROLLING_MEAN_3          67
+9              YEAR_MONTH          64
+0                    YEAR          48
+10  MONTH_LAST_YEAR_COUNT          47
+3      2_MONTHS_AGO_COUNT          30
+5         LAST_YEAR_COUNT          30
+4      3_MONTHS_AGO_COUNT          28
+7          ROLLING_MEAN_6          22
+2        LAST_MONTH_COUNT          15
+1                   MONTH           0
+
+Decision:
+-drop month
+-add more lag features
+
+                  Feature  Importance
+5          ROLLING_MEAN_1         897 - 
+1        LAST_MONTH_COUNT          73
+4         LAST_YEAR_COUNT          69
+2      2_MONTHS_AGO_COUNT          46
+3      3_MONTHS_AGO_COUNT          39
+6          ROLLING_MEAN_3          33
+11         ROLLING_STD_12          32 -
+8         ROLLING_MEAN_12          30 -
+10          ROLLING_STD_9          23-
+9           ROLLING_STD_3           7
+0                    YEAR           2
+7          ROLLING_MEAN_9           0
+12             YEAR_MONTH           0
+13  MONTH_LAST_YEAR_COUNT           0
+
+Remove 0s,
+
+Validation Mean Squared Error (LightGBM): 13699.810194909323
+Validation R-squared (LightGBM): 0.9254920588112591
+Validation Root Mean Squared Error: 117.04618829722446
+Validation Mean Absolute Error: 60.82840845971899
+
+Test Mean Squared Error (LightGBM): 15307.469138731607
+Test R-squared (LightGBM): 0.9070292429558737
+Test Root Mean Squared Error: 123.72335728847487
+Test Mean Absolute Error: 61.21956179554827
+
