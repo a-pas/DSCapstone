@@ -280,7 +280,7 @@ homicide_counts = homicide_counts.sort_values(ascending=False)
 
 print(homicide_counts)
 # %%
-import pandas as pd
+
 import matplotlib.pyplot as plt
 
 
@@ -302,3 +302,44 @@ plt.show()
 
 
 # %%
+# How much has the rate of homicides changed since 2008
+homicides = crimedc[crimedc['OFFENSE'] == 'HOMICIDE']
+
+homicides_by_year = homicides.groupby('YEAR').size()
+
+homicides_2008 = homicides_by_year.get(2008, 0)
+homicides_2023 = homicides_by_year.get(2023, 0)
+
+percent_change = ((homicides_2023 - homicides_2008) / homicides_2008) * 100
+print(f"The percent change in homicides from 2008 to 2023 is: {percent_change:.2f}%")
+
+# %%
+#How many homocides occur in Ward 8 (% wise)
+homicides = crimedc[crimedc['OFFENSE'] == 'HOMICIDE']
+
+homicides_ward_8 = homicides[homicides['WARD'] == 8]
+
+
+total_homicides = homicides.shape[0]  
+homicides_in_ward_8 = homicides_ward_8.shape[0]  
+
+
+
+percent_in_ward_8 = (homicides_in_ward_8 / total_homicides) * 100
+print(f"The percentage of homicides occurring in Ward 8 is: {percent_in_ward_8:.2f}%")
+
+# %%
+
+#How many homicides occur in Ward 7 (% wise)
+homicides = crimedc[crimedc['OFFENSE'] == 'HOMICIDE']
+
+homicides_ward_8 = homicides[homicides['WARD'] == 7]
+
+
+total_homicides = homicides.shape[0]  
+homicides_in_ward_8 = homicides_ward_8.shape[0]  
+
+
+
+percent_in_ward_8 = (homicides_in_ward_8 / total_homicides) * 100
+print(f"The percentage of homicides occurring in Ward 7 is: {percent_in_ward_8:.2f}%")
